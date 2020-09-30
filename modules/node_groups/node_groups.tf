@@ -30,16 +30,9 @@ resource "aws_eks_node_group" "workers" {
     }
   }
 
-  dynamic "launch_template" {
-    for_each = each.value["launch_template_id"] != "" ? [{
-      id      = each.value["launch_template_id"]
-      version = each.value["launch_template_version"]
-    }] : []
-
-    content {
-      id      = launch_template.value["id"]
-      version = launch_template.value["version"]
-    }
+  launch_template = {
+    id      = each.value["launch_template_id"]
+    version = each.value["launch_template_version"]
   }
 
   version = lookup(each.value, "version", null)
